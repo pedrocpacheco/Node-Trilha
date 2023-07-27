@@ -1,6 +1,6 @@
-const express = require("express");
+const express = require("express"); // Pega o express
 
-const app = express();
+const app = express(); // Cria o Express
 
 app.use(express.json()) // Diz que estamos usando JSON
 
