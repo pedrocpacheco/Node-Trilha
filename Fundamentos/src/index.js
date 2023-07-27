@@ -4,44 +4,6 @@ const app = express(); // Cria o Express
 
 app.use(express.json()) // Diz que estamos usando JSON
 
-/**
- * BAIXANDO DEPENDENCIAS:
- * Elas ficam salvas no package.json
- * 
- * Express: npm i express
- * Nodemon: npm i nodemon --dev
- * 
- * Depois de baixar um nodemon, precisa criar um script no package.json
- * "scripts": {
-    "dev": "nodemon src/index.js"
-  }
- */
-
-/**
- * METODOS HTTP: 
- * GET - Buscar uma informação dentro do servidor
- * POST - Inserir uma informação no servidor
- * PUT - Alterar uma informação no servidor
- * PATCH - Alterar uma informação especifica
- * DELETE - Deletar uma informação do servidor
- */
-
-/**
- * TIPOS DE PARAMETRO:
- * 
- * Route Params => Servem para identificar um recurso, edita-lo ou deleta-lo
- *  Eles estão encapsulados na rota, no barra.
- *  - :id
- *
- * Query Params => Paginação / Filtro
- *  São usados para paginação
- *  - page
- *  - size
- *  - order
- * 
- * Body Params => Os objetos para inserção/alteração
- */
-
 app.get("/courses", (req, res) => {
     const query = req.query;
     console.log(query);

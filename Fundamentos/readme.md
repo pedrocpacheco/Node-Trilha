@@ -2,8 +2,9 @@
 
 As dependências necessárias ficam salvas no `package.json`. Para instalar as dependências, utilize os seguintes comandos:
 
+- Geral: `npm init -y`
 - Express: `npm i express`
-- Nodemon: `npm i nodemon --dev`
+- Nodemon: `npm i nodemon -D`
 
 Após instalar o Nodemon, você precisa criar um script no `package.json`:
 
@@ -29,7 +30,7 @@ Existem três tipos de parâmetros usados nas requisições:
 
 1. Route Params: Servem para identificar um recurso, editá-lo ou deletá-lo. Eles são encapsulados na rota, após a barra.
    
- - /:id
+   - /:id
 
 2. Query Params: Utilizados para paginação ou filtragem. São passados na URL após o símbolo de interrogação. 
    
