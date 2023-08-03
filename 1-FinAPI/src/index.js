@@ -10,7 +10,7 @@ const costumers = [];
 app.post("/accounts", (req, res) => {
     const { cpf, name } = req.body;
 
-    const constumerAlreadyExists = costumers.some((costumer) => costumer.cpf === cpf); // ! Verifica se há account com cpf =
+    const constumerAlreadyExists = costumers.some(costumer => costumer.cpf === cpf); // ! Verifica se há account com cpf =
 
     if(constumerAlreadyExists){
         return response.status(400).json({ error: "Costumer Already Exits" }) // ? Se existir, devolve esse erro
@@ -25,6 +25,18 @@ app.post("/accounts", (req, res) => {
 
     costumers.push(costumer);
     return res.status(201).send(costumer);
+})
+
+app.get("/statement/:cpf", (req, res) => {
+    const { cpf } = req.body;
+    
+    const costumer = costumers.find(constumer => constumer.cpf === cpf)
+ 
+    if(!costumer) {
+        return res.status(400).json({ error: "Costumer not founded" })
+    }
+
+    return res.json(costumer);
 })
 
 
