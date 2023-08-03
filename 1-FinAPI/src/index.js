@@ -114,4 +114,27 @@ app.get("/statement/:date", verifyCPF, (req, res) =>{
     return res.json(statement);
 })
 
+app.put("/acounts", verifyCPF, (req, res) =>{
+    const { name } = req.body;
+    const { costumer } = req;
+
+    costumer.name = name;
+
+    return res.status(201).send(costumer);
+})
+
+app.get("/acounts", verifyCPF, (req, res) =>{
+    const { costumer } = req;
+
+    return res.json(costumer);
+})
+
+app.delete("/acounts", verifyCPF, (req, res) =>{
+    const { costumer } = req;
+
+    costumers.splice(costumer, 1);
+
+    return res.status(200).json(costumers);
+})
+
 app.listen(3333)
