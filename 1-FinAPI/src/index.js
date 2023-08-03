@@ -7,7 +7,22 @@ app.use(express.json())
 
 const costumers = [];
 
-app.post("/accounts", (req, res) => {
+// Middleware
+function verifyIfExistsByCpf(req, res, next){
+    const { cpf } = req.headers;
+
+    const customer = costumers.find(costumer => costumer.cpf === cpf);
+
+    if(!customer){
+        return res.status(400).json({ error: "Costumer not founded" })
+    }
+
+    req.costumer = costumer; 
+
+    return next()
+}
+
+app.post("/accounts", verifyIfExistsByCpf, (req, res) => {
     const { cpf, name } = req.body;
 
     const constumerAlreadyExists = costumers.some(costumer => costumer.cpf === cpf); // ! Verifica se há account com cpf =
@@ -27,15 +42,10 @@ app.post("/accounts", (req, res) => {
     return res.status(201).send(costumer);
 })
 
-app.get("/statement/:cpf", (req, res) => {
-    const { cpf } = req.body;
-    
-    const costumer = costumers.find(constumer => constumer.cpf === cpf)
- 
-    if(!costumer) {
-        return res.status(400).json({ error: "Costumer not founded" })
-    }
-
+// ! app.use(verifyIfExistsByCpf)
+// ? Como Parametro: Apenas Metodo usa | Com App.Use: Todos Abaixo usam
+app.get("/statement", verifyIfExistsByCpf, (req, res) => { 
+    const { costumer } = req;
     return res.json(costumer);
 })
 
