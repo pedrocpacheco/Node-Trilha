@@ -98,4 +98,20 @@ app.post("/withdraw", verifyCPF, (req, res) =>{
     return res.status(201).send(statementOperation);
 })  
 
+app.get("/statement/:date", verifyCPF, (req, res) =>{
+    const { date } = req.query;
+    const { costumer } = req;
+
+    const dateFormat = new Date(date + " 00:00");
+
+    const statement = costumer.statement.filter((statement) => statement.created_at.toDateString() ===  new Date
+    (dateFormat).toDateString());
+
+    if(!statement){
+        return res.status(400).send({ error: "Date not founded" })
+    }
+
+    return res.json(statement);
+})
+
 app.listen(3333)
