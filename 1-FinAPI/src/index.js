@@ -137,4 +137,12 @@ app.delete("/acounts", verifyCPF, (req, res) =>{
     return res.status(200).json(costumers);
 })
 
+app.get("/balance", verifyCPF, (req, res) =>{
+    const { costumer } = req;
+
+    const balance = getBalance(costumer.statement);
+
+    return res.json(balance)
+})
+
 app.listen(3333)
