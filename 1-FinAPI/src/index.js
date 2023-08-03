@@ -9,7 +9,7 @@ const costumers = [];
 
 function verifyCPF(req, res, next){
     const { cpf } = req.headers;
-
+    console.log(cpf);
     const costumer = costumers.find(costumer => costumer.cpf === cpf);
 
     if(!costumer){
@@ -21,7 +21,19 @@ function verifyCPF(req, res, next){
     return next();
 }
 
+function getBalance(statement){
+    const balance = statement.reduce((acc, operation) =>{
+        if(operation.type === "credit"){
+            return acc + operation.amount;
+        }else{
+            return acc - operation.amount;
+        }
+    }, 0)
+    return balance;
+}
+
 app.post("/acounts", (req, res) => {
+    console.log(req.body);
     const { cpf, name } = req.body;
 
     const constumerAlreadyExists = costumers.some(costumer => costumer.cpf === cpf); // ! Verifica se há account com cpf =
@@ -43,13 +55,15 @@ app.post("/acounts", (req, res) => {
 
 // app.use(verifyCPF) -> Como Parametro: Apenas Metodo usa | Com App.Use: Todos Abaixo usam
 app.get("/statement", verifyCPF, (req, res) => { 
+    console.log(req.body);
     const { costumer } = req;
-    return res.json(costumer); 
+    return res.json(costumer.statement); 
 })
 
 app.post("/deposit", verifyCPF, (req, res) => {
     const { description, amount } = req.body;
-    const { costumer } = req;
+    console.log(req.body);
+    const costumer = costumers[0]
 
     const statementOperation = {
         description,
@@ -62,5 +76,26 @@ app.post("/deposit", verifyCPF, (req, res) => {
 
     res.status(201).send(statementOperation);
 })
+
+app.post("/withdraw", verifyCPF, (req, res) =>{
+    const { amount } = req.body;
+    const { costumer } = req;
+
+    const balance = getBalance(costumer.statement);
+    
+    if(balance < amount){
+        return res.status(400).send({ error: "Insufficient Funds!" })
+    }
+
+    const statementOperation = {
+        amount, 
+        created_at: new Date(),
+        type: "debit"
+    }
+
+    costumer.statement.push(statementOperation);
+
+    return res.status(201).send(statementOperation);
+})  
 
 app.listen(3333)
