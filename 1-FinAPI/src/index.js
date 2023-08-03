@@ -7,7 +7,7 @@ app.use(express.json())
 
 const costumers = [];
 
-function verifyIfExistsByCpf(req, res, next){
+function verifyCPF(req, res, next){
     const { cpf } = req.headers;
 
     const costumer = costumers.find(costumer => costumer.cpf === cpf);
@@ -41,13 +41,13 @@ app.post("/acounts", (req, res) => {
     return res.status(201).send(costumer);
 })
 
-// app.use(verifyIfExistsByCpf) -> Como Parametro: Apenas Metodo usa | Com App.Use: Todos Abaixo usam
-app.get("/statement", verifyIfExistsByCpf, (req, res) => { 
+// app.use(verifyCPF) -> Como Parametro: Apenas Metodo usa | Com App.Use: Todos Abaixo usam
+app.get("/statement", verifyCPF, (req, res) => { 
     const { costumer } = req;
-    return res.json(costumer);
+    return res.json(costumer); 
 })
 
-app.post("/deposit", verifyIfExistsByCpf, (req, res) => {
+app.post("/deposit", verifyCPF, (req, res) => {
     const { description, amount } = req.body;
     const { costumer } = req;
 
